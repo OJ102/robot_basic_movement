@@ -42,11 +42,10 @@ def turn(angle):
     robot.turn(angle)
     ev3.speaker.beep()
 
-
 fwd(distn)
 turn(turn_degs)
 
-distn_inches=96
+distn_inches=96 
 distn=(distn_inches*2.54)*14 #2.54 is to convert the inches to cm so code runs properly
 
 fwd(distn)
