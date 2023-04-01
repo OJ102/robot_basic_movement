@@ -36,26 +36,33 @@ robot = DriveBase(left_motor, right_motor, wheel_diameter=43.8, axle_track=160)
 
 # Setting the speed for the motors
 robot.settings(v_dps)
-
-
-gyro_sensor.reset_angle(0)
-def turn():
-    angle = 180 # degrees
-    speed = 100 # mm/s
+def turn(a):
+    angle = a # degrees
+    s = 200 # mm/s
     
     #callibrates sensor
     robot.reset() 
     gyro_sensor.reset_angle(0)
 
     while gyro_sensor.angle() < angle:
-        left_motor.run(speed=speed)
-        right_motor.run(speed=(-1 * speed))
+        left_motor.run(speed=s)
+        right_motor.run(speed=(-1 * s))
 
     left_motor.brake()
     right_motor.brake()
-    ev3.speaker.beep() 
+    ev3.speaker.beep()    
 
-      
-    
+def obsavoider():
+    while True:
+    # Begin driving forward at 200 millimeters per second.
+        left_motor.run(speed=500)
+        right_motor.run(speed=500)
+    # Wait until an obstacle is detected. This is done by repeatedly
+    # doing nothing (waiting for 10 milliseconds) while the measured
+    # distance is still greater than 300 mm.
+        if proxi_sensor.distance() < 300:
+            ev3.speaker.beep() 
+            # Turn around by 90 degrees
+            turn(90)
 
-turn()
+obsavoider()

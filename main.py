@@ -63,40 +63,53 @@ def subtaskb(distn,angle):
 # subtaskb(distn,turn_degs)
 
 
-def turn():
-    angle = 180 # degrees
-    speed = 200 # mm/s
-
+def turn(a):
+    angle = a # degrees
+    s = 200 # mm/s
+    
+    #callibrates sensor
+    robot.reset() 
     gyro_sensor.reset_angle(0)
-    while gyro_sensor.angle() < angle:
-        left_motor.run(speed=speed)
-        right_motor.run(speed=(-1 * speed))
 
-    ev3.speaker.beep() 
+    while gyro_sensor.angle() < angle:
+        left_motor.run(speed=s)
+        right_motor.run(speed=(-1 * s))
 
     left_motor.brake()
-    right_motor.brake()    
+    right_motor.brake()
+    ev3.speaker.beep()     
 
-turn()
+# turn(180)
 
-def lift():
-    lift_motor.run(speed=-500)
+def lift(Speed):
+    ev3.speaker.beep() 
     wait(500)
-    lift_motor.brake()
+    lift_motor.run(speed=Speed)
+    wait(500)
+    # lift_motor.brake()
 
-# lift()
+# lift(-500)
 
 def proxi():
     while True:
         left_motor.run(speed=500)
         right_motor.run(speed=500)
         if proxi_sensor.distance() < 200:
+            left_motor.brake()
+            right_motor.brake()
             break
-    left_motor.brake()
-    right_motor.brake()
-    lift() 
+    lift(-500)
+    while True:
+        left_motor.run(speed=-500)
+        right_motor.run(speed=-500)
+        wait(1000)
+        left_motor.brake()
+        right_motor.brake()
+        break
+    lift(500)
 
-#proxi()
+
+# proxi()
 
 # def navigator(x,y):
 #     pos=[0,0]
@@ -106,16 +119,37 @@ def proxi():
 def test():
     while True:
     # Begin driving forward at 200 millimeters per second.
-        robot.drive(200, 0)
+        left_motor.run(speed=500)
+        right_motor.run(speed=500)
     # Wait until an obstacle is detected. This is done by repeatedly
     # doing nothing (waiting for 10 milliseconds) while the measured
     # distance is still greater than 300 mm.
         if proxi_sensor.distance() < 300:
             ev3.speaker.beep() 
-            # Drive backward for 300 millimeters.
-            robot.straight(-300)
-
             # Turn around by 90 degrees
-            robot.turn(90)
+            turn(90)
 
-# test()
+test()
+
+def gyrostrt():
+    distance = 1000 # millimetres
+    robotSpeed = 150 # mm/sec    
+
+    robot.reset() 
+    gyro_sensor.reset_angle(0)
+
+    PROPORTIONAL_GAIN = 1
+    if distance < 0: # move backwards
+        while robot.distance() > distance:
+            reverseSpeed = -1 * robotSpeed        
+            angle_correction = -1 * PROPORTIONAL_GAIN * gyro_sensor.angle()
+            robot.drive(reverseSpeed, angle_correction) 
+            wait(10)
+    elif distance > 0: # move forwards             
+        while robot.distance() < distance:
+            angle_correction = -1 * PROPORTIONAL_GAIN * gyro_sensor.angle()
+            robot.drive(robotSpeed, angle_correction) 
+            wait(10)            
+    robot.stop()
+
+# gyrostrt()
