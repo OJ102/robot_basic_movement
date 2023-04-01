@@ -109,27 +109,27 @@ def proxi():
     lift(500)
 
 
-# proxi()
+proxi()
 
 # def navigator(x,y):
 #     pos=[0,0]
 #     i=0
 #     j=0
 #     while True:
-def test():
+def obsavoider():
     while True:
     # Begin driving forward at 200 millimeters per second.
         left_motor.run(speed=500)
         right_motor.run(speed=500)
     # Wait until an obstacle is detected. This is done by repeatedly
     # doing nothing (waiting for 10 milliseconds) while the measured
-    # distance is still greater than 300 mm.
-        if proxi_sensor.distance() < 300:
+    # distance is still greater than 400 mm.
+        if proxi_sensor.distance() < 400:
             ev3.speaker.beep() 
             # Turn around by 90 degrees
             turn(90)
 
-test()
+# obsavoider()
 
 def gyrostrt():
     distance = 1000 # millimetres
