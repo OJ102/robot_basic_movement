@@ -64,7 +64,7 @@ def subtaskb(distn,angle):
 
 
 def turn():
-    angle = 90 # degrees
+    angle = 180 # degrees
     speed = 200 # mm/s
 
     gyro_sensor.reset_angle(0)
@@ -77,7 +77,7 @@ def turn():
     left_motor.brake()
     right_motor.brake()    
 
-# turn()
+turn()
 
 def lift():
     lift_motor.run(speed=-500)
@@ -96,7 +96,7 @@ def proxi():
     right_motor.brake()
     lift() 
 
-# proxi()
+#proxi()
 
 # def navigator(x,y):
 #     pos=[0,0]
@@ -118,4 +118,4 @@ def test():
             # Turn around by 90 degrees
             robot.turn(90)
 
-test()
+# test()
