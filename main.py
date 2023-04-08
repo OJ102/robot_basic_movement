@@ -109,7 +109,7 @@ def proxi():
     lift(500)
 
 
-proxi()
+# proxi()
 
 # def navigator(x,y):
 #     pos=[0,0]
@@ -126,10 +126,9 @@ def obsavoider():
     # distance is still greater than 400 mm.
         if proxi_sensor.distance() < 400:
             ev3.speaker.beep() 
-            # Turn around by 90 degrees
-            turn(90)
+            wait(100)
 
-# obsavoider()
+obsavoider()
 
 def gyrostrt():
     distance = 1000 # millimetres
@@ -153,3 +152,18 @@ def gyrostrt():
     robot.stop()
 
 # gyrostrt()
+
+
+
+
+
+
+def self_destruct():
+    n=0
+    while True:
+        ev3.speaker.beep()
+        
+        n+=1
+        if n==300:
+            break
+# self_destruct()
