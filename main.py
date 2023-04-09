@@ -148,7 +148,7 @@ def obsavoider():
             left_motor.brake()
             right_motor.brake()
             
-            wait(1000)
+            wait(3000)
         # Checks if the robot has reached the required distance
         if robot.distance()>=distn:
             break
