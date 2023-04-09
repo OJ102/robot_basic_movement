@@ -119,7 +119,7 @@ def obsavoider(d):
             break
         print(robot.distance())
 
-def main_subtask_1():
+def main_ST1():
     box=7 #put the number of the box here
     x=inch_to_mm(box_dist(box))
     y=inch_to_mm(30+2)
@@ -132,11 +132,10 @@ def main_subtask_1():
     obsavoider(y)
     turn(90)
     obsavoider(x)
-    # turn(0)
     wait(5000)
 
     obsavoider(x_return)
     turn(90)
     obsavoider(y)
 
-main_subtask_1()
+main_ST1()

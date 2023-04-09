@@ -7,7 +7,7 @@ from pybricks.ev3devices import Motor, UltrasonicSensor, GyroSensor, ColorSensor
 from pybricks.tools import DataLog, StopWatch, wait
 from pybricks.parameters import Port
 from pybricks.robotics import DriveBase
-import os
+import testing
 
 #Take all values
 turn_degs=180
@@ -40,6 +40,32 @@ watch = StopWatch()
 # Setting the speed for the motors
 robot.settings(v_dps)
 
+def subtaska(distn):
+    # Go forward and backwards for one meter.
+    robot.straight(distn)
+    ev3.speaker.beep()
+
+    robot.straight(-distn)#reverse
+    ev3.speaker.beep()
+
+def subtaskb(distn,angle):
+    # Go forward 'distn' meter.
+    robot.straight(distn)
+    ev3.speaker.beep()
+
+    # Make a U-turn.
+    robot.turn(angle)
+    ev3.speaker.beep()
+
+    # Go back to the original starting spot
+    robot.straight(distn)
+    ev3.speaker.beep()
+
+# subtaska(distn)
+
+# subtaskb(distn,turn_degs)
+
+
 def start():
     for i in range(10):
         ev3.speaker.beep()
@@ -48,10 +74,6 @@ start()
 def inch_to_mm(inch):
     mm=inch*25.4
     return mm
-
-def box_dist(box_num):
-    box_d_inches=(6*(box_num-6))
-    return box_d_inches
 
 def turn(a):
     angle = a # degrees
@@ -68,6 +90,17 @@ def turn(a):
     left_motor.brake()
     right_motor.brake()
     ev3.speaker.beep()     
+
+# turn(90)
+
+def lift(Speed):
+    ev3.speaker.beep() 
+    wait(500)
+    lift_motor.run(speed=Speed)
+    wait(500)
+    # lift_motor.brake()
+
+# lift(-500)
 
 def proxi():
 
@@ -94,10 +127,12 @@ def proxi():
 
 # proxi()
 
-def obsavoider(d):
-    distn=d
+def obsavoider():
+    distn=1000
     robot.reset()
     while True:
+        # Resets the time to 0
+        watch.reset()
         # Begin driving forward at 200 millimeters per second.
         left_motor.run(speed=500)
         right_motor.run(speed=500)
@@ -111,32 +146,18 @@ def obsavoider(d):
             left_motor.brake()
             right_motor.brake()
             
-            wait(2000)
+            wait(5000)
         # Checks if the robot has reached the required distance
         if robot.distance()>=distn:
-            left_motor.brake()
-            right_motor.brake()
             break
         print(robot.distance())
+        
+# obsavoider()
 
-def main_subtask_1():
-    box=7 #put the number of the box here
-    x=inch_to_mm(box_dist(box))
-    y=inch_to_mm(30+2)
+def barcode():
+    code=list()
 
-    x_return=inch_to_mm(84-box_dist(box)+3)
-    print(x,y,x_return)
-    print()
-    wait(5000)
+testing.straight()
 
-    obsavoider(y)
-    turn(90)
-    obsavoider(x)
-    # turn(0)
-    wait(5000)
+    
 
-    obsavoider(x_return)
-    turn(90)
-    obsavoider(y)
-
-main_subtask_1()

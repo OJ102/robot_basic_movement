@@ -7,61 +7,59 @@ from pybricks.ev3devices import Motor, UltrasonicSensor, GyroSensor, ColorSensor
 from pybricks.tools import DataLog, StopWatch, wait
 from pybricks.parameters import Port
 from pybricks.robotics import DriveBase
-import os
-
-#Take all values
-turn_degs=180
-distn_cm=100
-v_dps=500 # Velocity in degs per second
-x=0
-y=0
-
-# Callibrated distn to make bot actual go entered distance
-distn=distn_cm*14
 
 # Initialize the EV3 Brick.
 ev3 = EV3Brick()
 
-# Initialize the motors.
+# Initialize the gyro sensor
 proxi_sensor=UltrasonicSensor(Port.S1)
-gyro_sensor=GyroSensor(Port.S4)
+gyro=GyroSensor(Port.S4)
 color_sensor=ColorSensor(Port.S2)
 
 lift_motor = Motor(Port.A)
 left_motor = Motor(Port.B)
 right_motor = Motor(Port.C)
 
+
 # Initialize the drive base.
-robot = DriveBase(left_motor, right_motor, wheel_diameter=43.8, axle_track=160)
+robot = DriveBase(left_motor, right_motor, wheel_diameter=68.8, axle_track=110)
 
-# Start a stopwatch to measure elapsed time
-watch = StopWatch()
-def t1():
-    distn=1000
-    rd=0
+
+def turn(a):
+    s = 200 # mm/s
+
+    while gyro.angle() != a:
+        left_motor.run(speed=s)
+        right_motor.run(speed=(-1 * s))
+        print(gyro.angle())
+    left_motor.brake()
+    right_motor.brake()
+    ev3.speaker.beep()    
+
+def straight():
+    # Set the desired angle for going straight
+    target_angle = 0
+    gyro.reset_angle(0)
+    # Set the motor power for going straight
+    motor_power = 100
+
     while True:
-        # Resets the time to 0
-        watch.reset()
-
-        # Begin driving forward at 200 millimeters per second.
+        # Calculate the current angle of the robot using the gyro sensor
+        angle = gyro.angle()
         left_motor.run(speed=500)
         right_motor.run(speed=500)
+        # Calculate the error between the current angle and the desired angle
+        error = angle - target_angle
 
-        # Wait until an obstacle is detected. This is done by repeatedly
-        # doing nothing (waiting for 10 milliseconds) while the measured
-        # distance is still greater than 400 mm.
-        if proxi_sensor.distance() < 300:
+
+        # Calculate the correction factor based on the error
+        correction = error * 1.5
+        print(gyro.angle())
+        # Stop the loop when the robot is within a certain tolerance of the target angle
+        if abs(angle)>5:
+            turn(0)
             
-            ev3.speaker.beep() 
-
-            left_motor.brake()
-            right_motor.brake()
-
-            wait(1000)
-        # Checks if the robot has reached the required distance
-        if rd>=distn:
-            break
-        rd+=watch.time()*500
-        print(rd)
         
-t1()
+    # Stop the motors
+    robot.stop()
+straight()
