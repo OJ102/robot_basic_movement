@@ -1,3 +1,45 @@
+#!/usr/bin/env pybricks-micropython
+
+from pybricks.hubs import EV3Brick
+from pybricks.ev3devices import Motor, UltrasonicSensor, GyroSensor, ColorSensor
+# from pybricks.ev3devices import GyroSensor
+# from pybricks.ev3devices import MediumMotor
+from pybricks.tools import DataLog, StopWatch, wait
+from pybricks.parameters import Port
+from pybricks.robotics import DriveBase
+import os
+
+#Take all values
+turn_degs=180
+distn_cm=100
+v_dps=500 # Velocity in degs per second
+x=0
+y=0
+
+# Callibrated distn to make bot actual go entered distance
+distn=distn_cm*14
+
+# Initialize the EV3 Brick.
+ev3 = EV3Brick()
+
+# Initialize the motors.
+proxi_sensor=UltrasonicSensor(Port.S1)
+gyro_sensor=GyroSensor(Port.S4)
+color_sensor=ColorSensor(Port.S2)
+
+lift_motor = Motor(Port.A)
+left_motor = Motor(Port.B)
+right_motor = Motor(Port.C)
+
+# Initialize the drive base.
+robot = DriveBase(left_motor, right_motor, wheel_diameter=68.8, axle_track=110)
+
+# Start a stopwatch to measure elapsed time
+watch = StopWatch()
+
+# Setting the speed for the motors
+robot.settings(v_dps)
+
 def start():
     for i in range(10):
         ev3.speaker.beep()
@@ -8,7 +50,7 @@ def inch_to_mm(inch):
     return mm
 
 def box_dist(box_num):
-    box_d_inches=(6*(box_num-6))-3
+    box_d_inches=(6*(box_num-6))
     return box_d_inches
 
 def turn(a):
@@ -56,8 +98,6 @@ def obsavoider(d):
     distn=d
     robot.reset()
     while True:
-        # Resets the time to 0
-        watch.reset()
         # Begin driving forward at 200 millimeters per second.
         left_motor.run(speed=500)
         right_motor.run(speed=500)
@@ -71,24 +111,32 @@ def obsavoider(d):
             left_motor.brake()
             right_motor.brake()
             
-            wait(5000)
+            wait(2000)
         # Checks if the robot has reached the required distance
         if robot.distance()>=distn:
+            left_motor.brake()
+            right_motor.brake()
             break
         print(robot.distance())
 
 def main_subtask_1():
     box=7 #put the number of the box here
-    x=inch_to_mm(box_d_inches(box))
+    x=inch_to_mm(box_dist(box))
     y=inch_to_mm(30+2)
 
-    x_return=inch_to_mm(96-box_d_inches(box)+3)
+    x_return=inch_to_mm(84-box_dist(box)+3)
+    print(x,y,x_return)
+    print()
+    wait(5000)
 
     obsavoider(y)
     turn(90)
     obsavoider(x)
+    # turn(0)
     wait(5000)
+
     obsavoider(x_return)
     turn(90)
     obsavoider(y)
 
+main_subtask_1()
