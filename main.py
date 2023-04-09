@@ -71,6 +71,9 @@ def start():
         ev3.speaker.beep()
 start()
 
+def inch_to_mm(inch):
+    mm=inch*25.4
+    return mm
 
 def turn(a):
     angle = a # degrees
@@ -80,16 +83,15 @@ def turn(a):
     robot.reset() 
     gyro_sensor.reset_angle(0)
 
-    while gyro_sensor.angle() < angle:
+    while gyro_sensor.angle() <= angle:
         left_motor.run(speed=s)
         right_motor.run(speed=(-1 * s))
-
+        
     left_motor.brake()
     right_motor.brake()
     ev3.speaker.beep()     
 
-# turn(180)
-
+turn(90)
 def lift(Speed):
     ev3.speaker.beep() 
     wait(500)
@@ -124,11 +126,6 @@ def proxi():
 
 # proxi()
 
-# def navigator(x,y):
-#     pos=[0,0]
-#     i=0
-#     j=0
-#     while True:
 def obsavoider():
     distn=1000
     robot.reset()
@@ -148,14 +145,17 @@ def obsavoider():
             left_motor.brake()
             right_motor.brake()
             
-            wait(3000)
+            wait(5000)
         # Checks if the robot has reached the required distance
         if robot.distance()>=distn:
             break
         print(robot.distance())
         
-obsavoider()
+# obsavoider()
 
-# def barcode():
+def barcode():
+    code=list()
+
+
     
 
