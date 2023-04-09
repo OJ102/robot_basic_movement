@@ -37,11 +37,11 @@ robot = DriveBase(left_motor, right_motor, wheel_diameter=43.8, axle_track=160)
 # Setting the speed for the motors
 robot.settings(v_dps)
 
-def lift(Speed):
+def lift(Speed,t):
     ev3.speaker.beep() 
-    wait(500)
+    wait(t)
     lift_motor.run(speed=Speed)
-    wait(500)
+    wait(t)
     lift_motor.brake()
 
 
@@ -65,11 +65,11 @@ def proxi():
     while True:
         left_motor.run(speed=500)
         right_motor.run(speed=500)
-        if proxi_sensor.distance() < 200:
+        if proxi_sensor.distance() < 100:
             left_motor.brake()
             right_motor.brake()
             break
-    lift(-500)
+    lift(-100,2000)
     while True:
         left_motor.run(speed=-500)
         right_motor.run(speed=-500)
@@ -77,7 +77,7 @@ def proxi():
         left_motor.brake()
         right_motor.brake()
         break
-    lift(500)
+    lift(100,2000)
 
 
 proxi()
