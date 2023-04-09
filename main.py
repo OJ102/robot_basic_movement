@@ -1,13 +1,12 @@
 #!/usr/bin/env pybricks-micropython
 
 from pybricks.hubs import EV3Brick
-from pybricks.ev3devices import Motor, UltrasonicSensor, GyroSensor, ColorSensor
+from pybricks.ev3devices import Motor, UltrasonicSensor, GyroSensor,ColorSensor
 # from pybricks.ev3devices import GyroSensor
 # from pybricks.ev3devices import MediumMotor
 from pybricks.tools import DataLog, StopWatch, wait
 from pybricks.parameters import Port
 from pybricks.robotics import DriveBase
-import os
 
 #Take all values
 turn_degs=180
@@ -40,96 +39,6 @@ watch = StopWatch()
 # Setting the speed for the motors
 robot.settings(v_dps)
 
-def start():
-    for i in range(10):
-        ev3.speaker.beep()
-start()
 
-def inch_to_mm(inch):
-    mm=inch*25.4
-    return mm
-
-def box_dist(box_num):
-    box_d_inches=(6*(box_num-6))
-    return box_d_inches
-
-def turn(a):
-    angle = a # degrees
-    s = 200 # mm/s
-    
-    #callibrates sensor
-    robot.reset() 
-    gyro_sensor.reset_angle(0)
-
-    while gyro_sensor.angle() <= angle:
-        left_motor.run(speed=s)
-        right_motor.run(speed=(-1 * s))
-        
-    left_motor.brake()
-    right_motor.brake()
-    ev3.speaker.beep()     
-
-def proxi():
-
-    while True:
-        left_motor.run(speed=500)
-        right_motor.run(speed=500)
-        if proxi_sensor.distance() < 200:
-            left_motor.brake()
-            right_motor.brake()
-            break
-
-    lift(-500)
-
-    while True:
-        left_motor.run(speed=-500)
-        right_motor.run(speed=-500)
-        wait(1000)
-        left_motor.brake()
-        right_motor.brake()
-        break
-    
-    lift(500)
-
-
-# proxi()
-
-def obsavoider(d):
-    distn=d
-    robot.reset()
-    while True:
-        # Begin driving forward at 200 millimeters per second.
-        left_motor.run(speed=500)
-        right_motor.run(speed=500)
-        # Wait until an obstacle is detected. This is done by repeatedly
-        # doing nothing (waiting for 10 milliseconds) while the measured
-        # distance is still greater than 400 mm.
-        if proxi_sensor.distance() < 300:
-            
-            ev3.speaker.beep() 
-
-            left_motor.brake()
-            right_motor.brake()
-            
-            wait(2000)
-        # Checks if the robot has reached the required distance
-        if robot.distance()>=distn:
-            left_motor.brake()
-            right_motor.brake()
-            break
-        print(robot.distance())
-
-def main_ST2():
-    box=7 #put the number of the box here
-    x=inch_to_mm(box_dist(box))
-    y=inch_to_mm(30+2)
-
-    x_return=inch_to_mm(84-box_dist(box)+3)
-    print(x,y,x_return)
-    print()
-    wait(5000)
-
-    turn(90)
-    obsavoider(x+x_return)
-
-main_ST2()
+while True:
+    print( color_sensor.reflection())
