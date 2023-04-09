@@ -32,7 +32,7 @@ left_motor = Motor(Port.B)
 right_motor = Motor(Port.C)
 
 # Initialize the drive base.
-robot = DriveBase(left_motor, right_motor, wheel_diameter=43.8, axle_track=160)
+robot = DriveBase(left_motor, right_motor, wheel_diameter=68.8, axle_track=110)
 
 # Start a stopwatch to measure elapsed time
 watch = StopWatch()
@@ -64,6 +64,12 @@ def subtaskb(distn,angle):
 # subtaska(distn)
 
 # subtaskb(distn,turn_degs)
+
+
+def start():
+    for i in range(10):
+        ev3.speaker.beep()
+start()
 
 
 def turn(a):
@@ -124,7 +130,8 @@ def proxi():
 #     j=0
 #     while True:
 def obsavoider():
-    
+    distn=1000
+    robot.reset()
     while True:
         # Resets the time to 0
         watch.reset()
@@ -140,20 +147,15 @@ def obsavoider():
 
             left_motor.brake()
             right_motor.brake()
-
-            wait(100)
+            
+            wait(1000)
         # Checks if the robot has reached the required distance
-        if robot.distance()==distn:
+        if robot.distance()>=distn:
             break
-# obsavoider()
+        print(robot.distance())
+        
+obsavoider()
 
 # def barcode():
     
 
-
-def start():
-
-    mp3_file_path = 'C:\\Users\\shree\\Downloads\\SEGA_startup_sound'
-    os.system("mpg321 " + mp3_file_path)
-
-start()
