@@ -7,8 +7,6 @@ from pybricks.ev3devices import Motor, UltrasonicSensor, GyroSensor, ColorSensor
 from pybricks.tools import DataLog, StopWatch, wait
 from pybricks.parameters import Port
 from pybricks.robotics import DriveBase
-import testing
-import ST2
 
 #Take all values
 turn_degs=180
@@ -41,5 +39,38 @@ watch = StopWatch()
 # Setting the speed for the motors
 robot.settings(v_dps)
 
+def start():
+    for i in range(10):
+        ev3.speaker.beep()
+start()
 
-print("Hello World!")
+def inch_to_mm(inch):
+    mm=inch*25.4
+    return mm
+
+
+def gyro_fwd(s):
+
+    print("gyrofwd")
+    robot.reset()
+    gyro_sensor.reset_angle(0)
+    while True:
+
+        left_motor.run(speed=s)
+        right_motor.run(speed=s)
+        print(gyro_sensor.angle())
+        while gyro_sensor.angle() < -5:
+            left_motor.run(speed=s)
+            right_motor.run(speed=(-1 * s))
+            if gyro_sensor.angle()==0:
+                break
+            print(gyro_sensor.angle())
+        while gyro_sensor.angle() > 5:
+            left_motor.run(speed=-1*s)
+            right_motor.run(speed=(s))
+            print(gyro_sensor.angle())
+            if gyro_sensor.angle()==0:
+                break
+            print(gyro_sensor.angle())
+            
+gyro_fwd(50)

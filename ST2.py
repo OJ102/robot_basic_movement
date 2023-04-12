@@ -131,5 +131,6 @@ def main_ST2():
 
     turn(90)
     obsavoider(x+x_return)
+    turn(90)
 
 main_ST2()
