@@ -53,9 +53,9 @@ def box_dist(box_num):
     box_d_inches=(6*(box_num-6))
     return box_d_inches
 
-def turn(a):
+def turn(a,sp):
     angle = a # degrees
-    s = 200 # mm/s
+    s = sp # mm/s
     
     #callibrates sensor
     robot.reset() 
@@ -69,11 +69,11 @@ def turn(a):
     right_motor.brake()
     ev3.speaker.beep()     
 
-def proxi():
+def proxi(s):
 
     while True:
-        left_motor.run(speed=500)
-        right_motor.run(speed=500)
+        left_motor.run(speed=s)
+        right_motor.run(speed=s)
         if proxi_sensor.distance() < 200:
             left_motor.brake()
             right_motor.brake()
@@ -94,13 +94,13 @@ def proxi():
 
 # proxi()
 
-def obsavoider(d):
+def obsavoider(d,s):
     distn=d
     robot.reset()
     while True:
         # Begin driving forward at 200 millimeters per second.
-        left_motor.run(speed=500)
-        right_motor.run(speed=500)
+        left_motor.run(speed=s)
+        right_motor.run(speed=s)
         # Wait until an obstacle is detected. This is done by repeatedly
         # doing nothing (waiting for 10 milliseconds) while the measured
         # distance is still greater than 400 mm.
@@ -129,13 +129,15 @@ def main_ST1():
     print()
     wait(5000)
 
-    obsavoider(y)
-    turn(90)
-    obsavoider(x)
+    obsavoider(y,250)
+    turn(90,150)
+    wait(2000)
+    obsavoider(x,250)
     wait(5000)
 
-    obsavoider(x_return)
-    turn(90)
-    obsavoider(y)
+    obsavoider(x_return,250)
+    turn(90,150)
+    wait(2000)
+    obsavoider(y,250)
 
 main_ST1()
