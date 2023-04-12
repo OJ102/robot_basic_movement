@@ -119,24 +119,54 @@ def obsavoider(d,s):
             break
         print(robot.distance())
 
+def gyro_fwd(d,s):
+    distn=d
+    print("gyrofwd")
+    robot.reset()
+    gyro_sensor.reset_angle(0)
+    while True:
+
+        left_motor.run(speed=s)
+        right_motor.run(speed=s)
+        print(gyro_sensor.angle())
+        while gyro_sensor.angle() < -5:
+            left_motor.run(speed=s)
+            right_motor.run(speed=(-1 * s))
+            if gyro_sensor.angle()==0:
+                break
+            print(gyro_sensor.angle())
+        while gyro_sensor.angle() > 5:
+            left_motor.run(speed=-1*s)
+            right_motor.run(speed=(s))
+            print(gyro_sensor.angle())
+            if gyro_sensor.angle()==0:
+                break
+            print(gyro_sensor.angle())
+        if robot.distance()>=distn:
+            left_motor.brake()
+            right_motor.brake()
+            break
+        print(robot.distance())
+
 def main_ST1():
-    box=7 #put the number of the box here
+    box=11#put the number of the box here
     x=inch_to_mm(box_dist(box))
     y=inch_to_mm(30+2)
 
-    x_return=inch_to_mm(84-box_dist(box)+3)
+    x_return=inch_to_mm(96-box_dist(box)+3)
     print(x,y,x_return)
     print()
     wait(5000)
 
     obsavoider(y,250)
-    turn(90,150)
+    turn(85,100)
     wait(2000)
     obsavoider(x,250)
+    ev3.speaker.beep()
     wait(5000)
 
     obsavoider(x_return,250)
-    turn(90,150)
+    turn(85,100)
     wait(2000)
     obsavoider(y,250)
 

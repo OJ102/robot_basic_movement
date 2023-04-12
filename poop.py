@@ -7,8 +7,6 @@ from pybricks.ev3devices import Motor, UltrasonicSensor, GyroSensor, ColorSensor
 from pybricks.tools import DataLog, StopWatch, wait
 from pybricks.parameters import Port
 from pybricks.robotics import DriveBase
-import testing
-import ST2
 
 #Take all values
 turn_degs=180
@@ -41,53 +39,24 @@ watch = StopWatch()
 # Setting the speed for the motors
 robot.settings(v_dps)
 
-def subtaska(distn):
-    # Go forward and backwards for one meter.
-    robot.straight(distn)
-    ev3.speaker.beep()
-
-    robot.straight(-distn)#reverse
-    ev3.speaker.beep()
-
-def subtaskb(distn,angle):
-    # Go forward 'distn' meter.
-    robot.straight(distn)
-    ev3.speaker.beep()
-
-    # Make a U-turn.
-    robot.turn(angle)
-    ev3.speaker.beep()
-
-    # Go back to the original starting spot
-    robot.straight(distn)
-    ev3.speaker.beep()
-
-# subtaska(distn)
-
-# subtaskb(distn,turn_degs)
-
-
 def start():
     for i in range(10):
         ev3.speaker.beep()
 start()
 
-def inch_to_mm(inch):
-    mm=inch*25.4
-    return mm
+def turn(a,sped):
+    angle = a # degrees
+    s = sped # mm/s
+    
+    #callibrates sensor
+    robot.reset() 
+    gyro_sensor.reset_angle(0)
 
-
-def gyro_fwd():
-    print("gyrofwd")
-    robot.reset()
-    gyro.reset_angle(0)
-    print(gyro_sensor.angle())
-    while gyro_sensor.angle() <= 0:
+    while gyro_sensor.angle() <= angle:
         left_motor.run(speed=s)
         right_motor.run(speed=(-1 * s))
-        print(gyro_sensor.angle())
-    while gyro_sensor.angle() <= 0:
-        left_motor.run(speed=-1*s)
-        right_motor.run(speed=(s))
-        print(gyro_sensor.angle())
-gyro_fwd()
+        
+    left_motor.brake()
+    right_motor.brake()
+    ev3.speaker.beep()   
+turn(90,100)
