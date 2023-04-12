@@ -94,17 +94,10 @@ def proxi(s):
 
 # proxi()
 
-def obsavoider(d,s):
-    distn=d
-    robot.reset()
+def obsavoider(dist):
     while True:
-        # Begin driving forward at 200 millimeters per second.
-        left_motor.run(speed=s)
-        right_motor.run(speed=s)
-        # Wait until an obstacle is detected. This is done by repeatedly
-        # doing nothing (waiting for 10 milliseconds) while the measured
-        # distance is still greater than 400 mm.
-        if proxi_sensor.distance() < 300:
+        #Checks if obs is infront of it
+        if proxi_sensor.distance() < dist:
             
             ev3.speaker.beep() 
 
@@ -112,36 +105,36 @@ def obsavoider(d,s):
             right_motor.brake()
             
             wait(2000)
-        # Checks if the robot has reached the required distance
-        if robot.distance()>=distn:
-            left_motor.brake()
-            right_motor.brake()
-            break
-        print(robot.distance())
 
-def gyro_fwd(d,s):
+def gyro_fwd(d,s,sstrt):
     distn=d
     print("gyrofwd")
     robot.reset()
     gyro_sensor.reset_angle(0)
     while True:
-
-        left_motor.run(speed=s)
-        right_motor.run(speed=s)
+        obsavoider(300)
+        left_motor.run(speed=sstrt)
+        right_motor.run(speed=sstrt)
         print(gyro_sensor.angle())
         while gyro_sensor.angle() < -5:
             left_motor.run(speed=s)
             right_motor.run(speed=(-1 * s))
             if gyro_sensor.angle()==0:
+                left_motor.brake()
+                right_motor.brake()
                 break
             print(gyro_sensor.angle())
+
         while gyro_sensor.angle() > 5:
             left_motor.run(speed=-1*s)
             right_motor.run(speed=(s))
             print(gyro_sensor.angle())
             if gyro_sensor.angle()==0:
+                left_motor.brake()
+                right_motor.brake()
                 break
             print(gyro_sensor.angle())
+
         if robot.distance()>=distn:
             left_motor.brake()
             right_motor.brake()
@@ -158,16 +151,16 @@ def main_ST1():
     print()
     wait(5000)
 
-    obsavoider(y,250)
+    gyro_fwd(y,100,250)
     turn(85,100)
     wait(2000)
-    obsavoider(x,250)
+    gyro_fwd(x,100,250)
     ev3.speaker.beep()
     wait(5000)
 
-    obsavoider(x_return,250)
+    gyro_fwd(x_return,100,250)
     turn(85,100)
     wait(2000)
-    obsavoider(y,250)
+    gyro_fwd(y,100,250)
 
 main_ST1()
